@@ -1,0 +1,21 @@
+# NAME
+
+Lyra::Core - Common Libraries For Lyra Advertisement Deployment Server
+
+# SYNOPSIS
+
+    # just set some paths in your main app, and use the
+    # modules you want
+
+# AUTHOR
+
+Daisuke Maki (lestrrat)
+
+# LICENSE 
+
+Copyright (c) Daisuke Maki
+
+This program is free software; you can redistribut it and/or modify it
+under Artistic License 2.0
+
+http://www.perlfoundation.org/artistic_license_2_0
