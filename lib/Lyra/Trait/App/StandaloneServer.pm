@@ -1,4 +1,4 @@
-package Lyra::Trait::StandaloneServer;
+package Lyra::Trait::App::StandaloneServer;
 use Moose::Role;
 use Plack::Runner;
 use namespace::autoclean;
