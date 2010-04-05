@@ -10,4 +10,5 @@ requires 'Plack::Runner';
 requires 'Moose';
 requires 'namespace::autoclean';
 
+auto_set_repository;
 WriteAll;
