@@ -10,6 +10,12 @@ requires 'Plack::Runner';
 requires 'Moose';
 requires 'namespace::autoclean';
 
+# Test infrastructure
+requires 'Class::Accessor::Lite';
+requires 'Test::mysqld';
+requires 'Test::Memcached';
+requires 'Time::HiRes';
+
 if (! cc_available()) {
     print STDERR "No compiler available. Cannot continue\n";
     exit 0;
