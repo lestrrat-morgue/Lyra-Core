@@ -1,9 +1,9 @@
 package Lyra::Util;
 use strict;
 use warnings;
-use base qw(Exporter);
-
-our @EXPORT_OK = qw(NOOP);
+use Exporter qw(import);
+use Lyra::Core;
+our @EXPORT_OK = qw(NOOP calc_range);
 
 sub NOOP {}
 
