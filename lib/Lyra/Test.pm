@@ -1,12 +1,17 @@
 package Lyra::Test;
 use strict;
 use base qw(Exporter);
-use AnyEvent::DBI;
-use Cache::Memcached::AnyEvent;
 use Lyra::Test::Plackup;
 use Lyra::Test::Fixture::Daemons;
 
-our @EXPORT_OK = qw(start_daemons async_dbh click_server adengine_byarea find_program);
+our @EXPORT_OK = qw(
+    adengine_byarea
+    async_dbh
+    click_server 
+    dbic_schema
+    find_program
+    start_daemons 
+);
 
 sub null_log {
     require Lyra::Log::Storage::Null;
@@ -19,7 +24,26 @@ sub start_daemons(@) {
     return $guard;
 }
 
+sub dbic_schema(@) {
+    my @connect_info = @_;
+    require Lyra::Schema;
+
+    if (! @connect_info) {
+        @connect_info = (
+            $ENV{TEST_DSN},
+            $ENV{TEST_USERNAME},
+            $ENV{TEST_PASSWORD},
+            {
+                RaiseError => 1,
+                AutoCommit => 1,
+            }
+        );
+    }
+    return Lyra::Schema->connect( @connect_info );
+}
+
 sub async_dbh(@) {
+    require AnyEvent::DBI;
     return AnyEvent::DBI->new(
         $ENV{TEST_DSN},
         $ENV{TEST_USERNAME},
@@ -31,6 +55,7 @@ sub async_dbh(@) {
 }
 
 sub async_memcached(@) {
+    require Cache::Memcached::AnyEvent;
     return Cache::Memcached::AnyEvent->new(
         servers => [ "127.0.0.1:$ENV{ TEST_MEMCACHED_PORT }" ],
         compress_threshld => 10_000,
