@@ -78,6 +78,7 @@ sub click_server(@) {
 
             Lyra::Server::Click->new(
                 dbh => async_dbh(),
+                cache => async_memcached(),
                 log_storage => null_log(),
             )->psgi_app
         },
