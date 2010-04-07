@@ -17,6 +17,11 @@ sub start {
                 'skip-networking' => '',
             }
         );
+
+        if (! $mysql) {
+            confess "Could not establish mysqld";
+        }
+
         $ENV{TEST_DSN} = $mysql->dsn();
         $self->{_mysql} = $mysql;
     }
