@@ -13,6 +13,12 @@ has schema => (
     }
 );
 
+has connect_info => (
+    is => 'ro',
+    isa => 'ArrayRef',
+    required => 1,
+);
+
 sub _build_schema {
     my $self = shift;
     return Lyra::Schema->connect( @{ $self->connect_info } );
