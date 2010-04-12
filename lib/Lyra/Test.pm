@@ -1,6 +1,7 @@
 package Lyra::Test;
 use strict;
 use base qw(Exporter);
+use Carp ();
 use Lyra::Test::Plackup;
 use Lyra::Test::Fixture::Daemons;
 
@@ -30,7 +31,7 @@ sub dbic_schema(@) {
 
     if (! @connect_info) {
         @connect_info = (
-            $ENV{TEST_DSN},
+            $ENV{TEST_DSN} || Carp::confess("No DSN provided for Test DBIC Schema"),
             $ENV{TEST_USERNAME},
             $ENV{TEST_PASSWORD},
             {
