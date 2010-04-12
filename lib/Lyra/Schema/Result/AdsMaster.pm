@@ -5,10 +5,15 @@ use base qw(Lyra::Schema::Result);
 
 # Hold the master ad data. This table does not get used when searching.
 
-__PACKAGE__->load_components( qw(TimeStamp Core) );
+__PACKAGE__->load_components( qw(UUIDColumns TimeStamp Core) );
 __PACKAGE__->table('lyra_ads_master');
 __PACKAGE__->add_columns(
     id => {
+        data_type => 'CHAR',
+        size      => 36,
+        is_nullable => 0,
+    },
+    member_id => {
         data_type => 'CHAR',
         size      => 36,
         is_nullable => 0,
@@ -45,5 +50,6 @@ __PACKAGE__->add_columns(
     }
 );
 __PACKAGE__->set_primary_key('id');
-
+__PACKAGE__->uuid_columns('id');
+__PACKAGE__->belongs_to('member' => 'Lyra::Schema::Result::Member' => 'member_id');
 1;
