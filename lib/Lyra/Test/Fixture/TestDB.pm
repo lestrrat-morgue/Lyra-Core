@@ -1,5 +1,6 @@
 package Lyra::Test::Fixture::TestDB;
 use Moose;
+use Digest::SHA1 qw(sha1_hex);
 use namespace::autoclean;
 
 has adserver_uri => (
@@ -11,6 +12,36 @@ has adserver_uri => (
 sub deploy {
     my ($self, $schema) = @_;
 
+    my $guard = $schema->txn_scope_guard();
+
+    $self->deploy_members( $schema );
+    $self->deploy_adsmaster( $schema );
+
+    $guard->commit();
+}
+
+sub deploy_members {
+    my ($self, $schema) = @_;
+
+    $schema->resultset('Member')->create({
+        id       => 'cb4f1ef2-45df-11df-afbd-37ecf7137823',
+        email    => 'admin@lyra',
+        password => sha1_hex( 'admin' ),
+    })->create_related( roles => {
+        rolename => 'admin'
+    } );
+
+    $schema->resultset('Member')->create({
+        id       => '0e2feb66-45e0-11df-afbd-37ecf713782',
+        email    => 'client@lyra',
+        password => sha1_hex( 'client' ),
+    })->create_related( roles => {
+        rolename => 'client'
+    } );
+}
+
+sub deploy_adsmaster {
+    my ($self, $schema) = @_;
     my $master_rs = $schema->resultset('AdsMaster');
 
     # XXX use some other method if you want to bulk insert 
@@ -19,6 +50,7 @@ sub deploy {
         $_->{id} ||= sprintf('test_ads_by_area%03d', $count++);
         $_->{landing_uri} ||= "http://127.0.0.1/$_->{id}";
         $_->{status} = 1 unless exists $_->{status};
+        $_->{member_id} = '0e2feb66-45e0-11df-afbd-37ecf713782';
         $_;
     } (
         {
