@@ -16,7 +16,6 @@ has schema => (
 has connect_info => (
     is => 'ro',
     isa => 'ArrayRef',
-    required => 1,
 );
 
 sub _build_schema {
